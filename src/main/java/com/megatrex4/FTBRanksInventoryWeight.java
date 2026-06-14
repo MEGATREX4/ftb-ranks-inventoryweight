@@ -5,7 +5,7 @@ import dev.ftb.mods.ftbranks.api.FTBRanksAPI;
 import dev.ftb.mods.ftbranks.api.PermissionValue;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +62,7 @@ public class FTBRanksInventoryWeight implements ModInitializer {
 		);
 	}
 
-	private static float modifyMaxWeight(ServerPlayerEntity player, float currentMaxWeight) {
+	private static float modifyMaxWeight(ServerPlayer player, float currentMaxWeight) {
 		if (!isFtbRanksReady()) {
 			return currentMaxWeight;
 		}
@@ -104,7 +104,7 @@ public class FTBRanksInventoryWeight implements ModInitializer {
 	 * API jar uses) are the same runtime class, so the player reference is passed through
 	 * directly.
 	 */
-	private static float readNode(ServerPlayerEntity player, String node, float defaultValue) {
+	private static float readNode(ServerPlayer player, String node, float defaultValue) {
 		PermissionValue value = FTBRanksAPI.getPermissionValue(player, node);
 
 		if (value == null || value.isEmpty()) {
