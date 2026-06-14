@@ -11,6 +11,9 @@ base {
 }
 
 repositories {
+	// FTB's own Maven hosts the real ftb-library / ftb-ranks artifacts,
+	// including the 2001.1.x FTB Library line that ftb-ranks-2001.1.7 actually requires.
+	// (CurseForge only publishes 2001.2.x for 1.20.1, which is the INCOMPATIBLE line.)
 	maven {
 		name = "FTB"
 		url = "https://maven.ftb.dev/releases"
@@ -80,8 +83,9 @@ java {
 }
 
 jar {
+	def baseName = archiveBaseName
 	from("LICENSE") {
-		rename { "${it}_${archivesName}" }
+		rename { "${it}_${baseName}" }
 	}
 }
 
