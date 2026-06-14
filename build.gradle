@@ -7,6 +7,13 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
+	// FTB's own Maven hosts the real ftb-library / ftb-ranks artifacts, including the
+	// 2001.1.x FTB Library line that ftb-ranks-2001.1.7 actually requires.
+	// (CurseForge only publishes 2001.2.x for 1.20.1, which is the INCOMPATIBLE line.)
+	maven {
+		name = "FTB"
+		url = "https://maven.ftb.dev/releases"
+	}
 	maven {
 		url "https://cursemaven.com"
 	}
@@ -26,7 +33,6 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-
 	localRuntime files(
 			"jars/kotlin-stdlib-1.9.24.jar",
 			"jars/kotlin-stdlib-jdk8-1.9.24.jar",
@@ -40,7 +46,14 @@ dependencies {
 			"jars/tomlkt-jvm-0.3.7.jar"
 	)
 
-	modImplementation "curse.maven:ftb-ranks-fabric-472659:${project.ftb_ranks_version}"
+	modImplementation("dev.ftb.mods:ftb-ranks-fabric:${project.ftb_ranks_version}") {
+		transitive = false
+	}
+	modImplementation("dev.ftb.mods:ftb-library-fabric:${project.ftb_library_version}") {
+		transitive = false
+	}
+
+	modImplementation "maven.modrinth:architectury-api:${project.architectury_api_version}"
 
 	modImplementation "maven.modrinth:inventory-weight:${project.inventory_weight_version}"
 }
@@ -73,7 +86,7 @@ jar {
 	inputs.property "projectName", projectName
 
 	from("LICENSE") {
-		rename { "${it}_$projectName"}
+		rename { "${it}_$projectName" }
 	}
 }
 
@@ -85,11 +98,7 @@ publishing {
 		}
 	}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
 		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
 	}
 }
